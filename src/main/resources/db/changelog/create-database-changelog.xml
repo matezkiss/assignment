@@ -1,0 +1,92 @@
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+	   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd 
+	   http://www.liquibase.org/xml/ns/dbchangelog 
+	   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+	<changeSet author="mkiss" id="1">
+
+		<createTable tableName="location">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="manager_name" type="varchar(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="phone" type="varchar(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="address_primary" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="address_secondary" type="varchar(200)" />
+			<column name="country" type="varchar(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="town" type="varchar(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="postal_code" type="varchar(20)" />
+		</createTable>
+
+		<createTable tableName="marketplace">
+			<column name="id" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="marketplace_name" type="varchar(200)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="listing_status">
+			<column name="id" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="status_name" type="varchar(20)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="listing">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="title" type="text">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="false" />
+			</column>
+			<column name="inventory_item_location_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="fk_location" references="location(id)" />
+			</column>
+			<column name="listing_price" type="decimal(12, 2) unsigned)">
+				<constraints nullable="false" />
+			</column>
+			<column name="currency" type="char(3)">
+				<constraints nullable="false" />
+			</column>
+			<column name="quantity" type="int unsigned">
+				<constraints nullable="false" />
+			</column>
+			<column name="listing_status" type="int">
+				<constraints nullable="false"
+					foreignKeyName="fk_listing_status" references="listing_status(id)" />
+			</column>
+			<column name="marketplace" type="int">
+				<constraints nullable="false"
+					foreignKeyName="fk_marketplace" references="marketplace(id)" />
+			</column>
+			<column name="upload_time" type="date" />
+			<column name="owner_email_address" type="varchar(254)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+	</changeSet>
+
+</databaseChangeLog>
