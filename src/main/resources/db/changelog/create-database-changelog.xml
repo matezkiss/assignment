@@ -10,7 +10,7 @@
 	<changeSet author="mkiss" id="1">
 
 		<createTable tableName="location">
-			<column name="id" type="uuid">
+			<column name="id" type="binary(16)">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="manager_name" type="varchar(80)">
@@ -51,7 +51,7 @@
 		</createTable>
 
 		<createTable tableName="listing">
-			<column name="id" type="uuid">
+			<column name="id" type="binary(16)">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="title" type="text">
@@ -60,7 +60,7 @@
 			<column name="description" type="text">
 				<constraints nullable="false" />
 			</column>
-			<column name="inventory_item_location_id" type="uuid">
+			<column name="inventory_item_location_id" type="binary(16)">
 				<constraints nullable="false"
 					foreignKeyName="fk_location" references="location(id)" />
 			</column>

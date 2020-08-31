@@ -11,7 +11,7 @@ public class Marketplace {
 	private final String name;
 
 	@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-	public Marketplace(@JsonProperty("id") int id, @JsonProperty("marketplace_name") String name) {
+	public Marketplace(@JsonProperty("id") final int id, @JsonProperty("marketplace_name") final String name) {
 		this.id = id;
 		this.name = name;
 	}

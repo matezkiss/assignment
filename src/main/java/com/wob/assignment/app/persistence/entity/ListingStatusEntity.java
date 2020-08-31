@@ -6,21 +6,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "marketplace")
-public class MarketplaceEntity {
+@Table(name = "listing_status")
+public class ListingStatusEntity {
 
 	@Id
-	@Column(name = "id")
 	private int id;
 
-	@Column(name = "marketplace_name")
+	@Column(name = "status_name")
 	private String name;
-
-	public MarketplaceEntity() {
-
+	
+	public ListingStatusEntity() {
+		
 	}
 
-	public MarketplaceEntity(int id, String name) {
+	public ListingStatusEntity(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -29,12 +28,12 @@ public class MarketplaceEntity {
 		return id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public void setName(String name) {

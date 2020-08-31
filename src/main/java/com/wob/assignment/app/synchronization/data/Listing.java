@@ -3,6 +3,7 @@ package com.wob.assignment.app.synchronization.data;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,23 +13,25 @@ public class Listing {
 	private final String id;
 	private final String title;
 	private final String description;
-	private final int locationId;
-	private final double price;
+	private final String locationId;
+	private final Double price;
 	private final String currency;
-	private final long quantity;
-	private final int status;
-	private final int marketplace;
+	private final Integer quantity;
+	private final Integer status;
+	private final Integer marketplace;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
 	private final Date uploadDate;
 	private final String ownerEmailAddress;
 
 	@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
 	public Listing(@JsonProperty("id") String id, @JsonProperty("title") String title,
-			@JsonProperty("description") String description, @JsonProperty("inventory_item_location_id") int locationId,
-			@JsonProperty("listing_price") double price, @JsonProperty("currency") String currency,
-			@JsonProperty("quantity") long quantity, @JsonProperty("listing_status") int status,
-			@JsonProperty("marketplace") int marketplace, @JsonProperty("upload_time") Date uploadDate,
+			@JsonProperty("description") String description,
+			@JsonProperty("location_id") String locationId, @JsonProperty("listing_price") Double price,
+			@JsonProperty("currency") String currency, @JsonProperty("quantity") Integer quantity,
+			@JsonProperty("listing_status") Integer status, @JsonProperty("marketplace") Integer marketplace,
+			@JsonProperty("upload_time") Date uploadDate,
 			@JsonProperty("owner_email_address") String ownerEmailAddress) {
-		
+
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -54,11 +57,11 @@ public class Listing {
 		return description;
 	}
 
-	public int getLocationId() {
+	public String getLocationId() {
 		return locationId;
 	}
 
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
@@ -66,15 +69,15 @@ public class Listing {
 		return currency;
 	}
 
-	public long getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public int getMarketplace() {
+	public Integer getMarketplace() {
 		return marketplace;
 	}
 
