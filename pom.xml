@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.wob</groupId>
 	<artifactId>assignment</artifactId>
-	<version>test-exclude-1.0.0-SNAPSHOT</version>
+	<version>1.0.0-RELEASE</version>
 	<name>assignment</name>
 	<description>Solition of the assignment using Spring Boot by KMZ</description>
 
