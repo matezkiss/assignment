@@ -35,3 +35,4 @@ Notes:<br>
 <br>
 1. Eclipse, Maven 3.6.3 and jdk8 were used to develop this project on OSX<br>
 2. Datebase: MySQL 8.0.21 Community Server<br>
+3. FTP upload was tested with speedtest.tele2.net<br>
