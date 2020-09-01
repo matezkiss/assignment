@@ -7,10 +7,6 @@ giving some flexibility, although it's only been tested using the values seen in
 values, please run the following commands in your local mysql terminal before running the app:
 <br>
 
-Create database for the app:<br>
-CREATE DATABASE world_of_books;<br>
-<br>
-
 Create user db user for the app:<br>
 CREATE USER 'reporting_app'@'localhost' IDENTIFIED BY 'strong_password_for_app';<br>
 <br>
