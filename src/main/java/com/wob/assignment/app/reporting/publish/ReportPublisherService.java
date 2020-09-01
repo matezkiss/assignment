@@ -60,6 +60,7 @@ public class ReportPublisherService implements IReportPublisherService {
 				logger.error("could not disconnect from ftp server.");
 			}
 			report.delete();
+			logger.info("deleted report temp file.");
 		}
 	}
 
