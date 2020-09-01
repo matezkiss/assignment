@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -59,49 +59,53 @@ public class ReportFactory {
 			aggregator.incrementTotalPrice(monthlyStat.getTotalListingPrice());
 		}
 
+		// build monthly reports
+		final List<MonthlyReport> monthlyReports = builders.values().stream().map(MonthlyReportBuilder::build)
+				.collect(Collectors.toList());
+
+		// collect NULL month data if exists (i.e. data not belonging to any month)
+		final Optional<MonthlyReport> optNullMonthReport = collectNullMonthData(rawData, aggregators);
+		if (optNullMonthReport.isPresent()) {
+			monthlyReports.add(optNullMonthReport.get());
+		}
+
 		// global data
 		final int totalListingCount = aggregators.values().stream().map(AggregatedMarketplaceData::getTotalListingCount)
 				.reduce(0, Integer::sum);
 		final List<String> allTimeBestLister = rawData.getAlltimeBestLister();
 
-		// build monthly reports
-		final List<MonthlyReport> monthlyReports = builders.values().stream().map(MonthlyReportBuilder::build)
-				.collect(Collectors.toList());
-
-		// collect and add NULL month data (i.e. data not belonging to any month
-		final MonthlyReport nullMonthReport = collectNullMonthData(rawData);
-		monthlyReports.add(nullMonthReport);
-
 		return new Report(totalListingCount, aggregators, allTimeBestLister, monthlyReports);
 	}
 
-	private MonthlyReport collectNullMonthData(final RawReportData rawData) {
+	private Optional<MonthlyReport> collectNullMonthData(final RawReportData rawData,
+			final Map<String, AggregatedMarketplaceData> aggregators) {
+
 		final List<String> nullMonthBestLister = rawData.getMonthlyBestLister().stream()
 				.filter(l -> Objects.isNull(l.getMonth())).map(MonthlyBestListerRow::getEmail)
 				.collect(Collectors.toList());
 
-		final Map<String, List<MonthlyStatsRow>> nullMonthRows = rawData.getMonthlyStats().stream()
-				.filter(m -> m.getMonth() == null).collect(Collectors.groupingBy(MonthlyStatsRow::getMarketplace));
+		final List<MonthlyStatsRow> nullMonthRows = rawData.getMonthlyStats().stream().filter(m -> m.getMonth() == null)
+				.collect(Collectors.toList());
 
-		final Map<String, MarketplaceStats> nullMontMarketplaceStats = new HashMap<>();
-
-		for (final Entry<String, List<MonthlyStatsRow>> nullMonthSatEntry : nullMonthRows.entrySet()) {
-
-			final String marketplace = nullMonthSatEntry.getKey();
-
-			int listingCount = 0;
-			double totalPrice = 0.0;
-
-			for (final MonthlyStatsRow stat : nullMonthRows.get(marketplace)) {
-				listingCount += stat.getListingCount();
-				totalPrice += stat.getTotalListingPrice();
-			}
-
-			final double avgPrice = listingCount == 0 ? 0.0 : totalPrice / (double) listingCount;
-			nullMontMarketplaceStats.put(marketplace, new MarketplaceStats(listingCount, totalPrice, avgPrice));
+		if (nullMonthBestLister.isEmpty() && nullMonthRows.isEmpty()) {
+			return Optional.empty();
 		}
 
-		return new MonthlyReport(null, nullMonthBestLister, nullMontMarketplaceStats);
+		final Map<String, MarketplaceStats> nullMonthMarketplaceStats = new HashMap<>();
+
+		for (final MonthlyStatsRow nullMonthRow : nullMonthRows) {
+
+			final String marketplace = nullMonthRow.getMarketplace();
+			final MarketplaceStats nullmonthMarketStats = new MarketplaceStats(nullMonthRow.getListingCount(),
+					nullMonthRow.getTotalListingPrice(), nullMonthRow.getAverageListingPrice());
+
+			final AggregatedMarketplaceData aggregator = aggregators.get(marketplace);
+			aggregator.incrementListingCount(nullMonthRow.getListingCount());
+			aggregator.incrementTotalPrice(nullMonthRow.getTotalListingPrice());
+			nullMonthMarketplaceStats.put(marketplace, nullmonthMarketStats);
+		}
+
+		return Optional.of(new MonthlyReport(null, nullMonthBestLister, nullMonthMarketplaceStats));
 	}
 
 	/**

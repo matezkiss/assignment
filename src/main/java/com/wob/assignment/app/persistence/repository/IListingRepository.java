@@ -36,7 +36,7 @@ public interface IListingRepository extends JpaRepository<ListingEntity, UUID> {
 	 * 
 	 * @return listing count, total price, avg price per marketplace per month
 	 */
-	@Query(nativeQuery = true, value = "select str_to_date(concat(r.strmonth, '-01'), '%Y-%m-%d') as month, r.marketplace, r.listingCount, r.totalListingPrice, r.averageListingPrice from (select date_format(upload_time, '%Y-%m') as strmonth, marketplace_name as marketplace, count(*) as listingCount, sum(listing_price) as totalListingPrice, avg(listing_price) as averageListingPrice from listing li join marketplace m on li.marketplace = m.id join listing_status ls on li.listing_status = ls.id where status_name in ('ACTIVE', 'SCHEDULED') and marketplace_name in ('AMAZON', 'EBAY') group by date_format(upload_time, '%Y-%m'), marketplace_name) r")
+	@Query(nativeQuery = true, value = "select str_to_date(concat(r.strmonth, '-01'), '%Y-%m-%d') as month, r.marketplace, r.listingCount, r.totalListingPrice, r.averageListingPrice from (select date_format(upload_time, '%Y-%m') as strmonth, marketplace_name as marketplace, count(*) as listingCount, sum(listing_price) as totalListingPrice, avg(listing_price) as averageListingPrice from listing li join marketplace m on li.marketplace = m.id join listing_status ls on li.listing_status = ls.id where status_name in :statuses and marketplace_name in :marketplaces group by date_format(upload_time, '%Y-%m'), marketplace_name) r")
 	public List<MonthlyStatsRow> getMonthlyStats(final List<String> statuses, final List<String> marketplaces);
 
 }
