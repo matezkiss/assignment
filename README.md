@@ -1,4 +1,4 @@
-# wob_assignment
+# assignment
 repository for the codebase of the application specidied in the assignment
 <br><br><br>
 
